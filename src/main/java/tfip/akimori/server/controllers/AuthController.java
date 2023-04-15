@@ -25,6 +25,7 @@ public class AuthController {
     public ResponseEntity<String> register(@RequestBody String request) {
         // read JSON
         JsonObject jsonRequest = JsonUtil.toJson(request).asJsonObject();
+        // System.out.println("Register Request >>>>> " + jsonRequest);
         JsonObject jwt;
         try {
             // save new user & get jwt
@@ -34,7 +35,7 @@ public class AuthController {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body("\"message\": \"%s\"".formatted(e.getMessage()));
+                    .body("\"error\": \"%s\"".formatted(e.getMessage()));
         }
         return ResponseEntity
                 .status(HttpStatus.OK)

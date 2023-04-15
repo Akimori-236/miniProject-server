@@ -32,8 +32,8 @@ import tfip.akimori.server.models.User;
 @Service
 public class JwtService {
 
-    @Value("${secret.key}")
-    private String secretKey;
+    @Value("${sha256.secret}")
+    private String sha256Secret;
 
     public JsonObject generateJWT(User user) {
         Instant now = Instant.now();
@@ -43,7 +43,7 @@ public class JwtService {
                 .setSubject(user.getEmail())
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(expiration))
-                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256) // sign with secret key
+                .signWith(Keys.hmacShaKeyFor(sha256Secret.getBytes()), SignatureAlgorithm.HS256) // sign with secret key
                 .compact();
         // create JSON object
         JsonObject jwtObject = Json.createObjectBuilder()
@@ -71,7 +71,7 @@ public class JwtService {
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(sha256Secret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

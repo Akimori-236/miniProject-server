@@ -26,7 +26,7 @@ public class UserRepository {
     private JdbcTemplate template;
 
     public Integer save(User user) throws DuplicateEmailException {
-        System.out.println("PASSWORD>>>>>>>>" + user.getPassword());
+        // System.out.println("PASSWORD>>>>>>>>" + user.getPassword());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
             template.update(connection -> {
