@@ -21,22 +21,24 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // disable csrf verification?
-        // whitelisting for account creation and logging in (no token yet)
-        // permit all in matchers
-        // but authenticate all other requests
-        // execute jwtauthfilter before usernamepasswordauthfilter
+        // disable csrf verification
         http.csrf().disable()
+                // whitelist account creation and logging in (no token yet)
                 .authorizeHttpRequests()
-                .anyRequest()
-                .permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
+                // require authentication for all other requests
+                .anyRequest().authenticated()
                 .and()
+                // set session creation policy to stateless
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                // set authentication provider and add JWT auth filter before username/password
+                // auth filter
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 }

@@ -6,7 +6,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import tfip.akimori.server.exceptions.DuplicateEmailException;
 import tfip.akimori.server.models.Role;

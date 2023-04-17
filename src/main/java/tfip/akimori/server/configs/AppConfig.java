@@ -38,11 +38,13 @@ public class AppConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        // the password hasher, before keeping it in mysql
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        
         return authConfig.getAuthenticationManager();
     }
 }
