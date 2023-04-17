@@ -36,13 +36,13 @@ public class JwtService {
     private String sha256Secret;
 
     public JsonObject generateJWT(User user) {
-        Instant now = Instant.now();
-        Instant expiration = now.plus(1, ChronoUnit.HOURS);
+        Long expDuration = 1000l * 60 * 60;
         // create JWT
         String jwt = Jwts.builder()
+                .setHeaderParam("typ", "JWT")
                 .setSubject(user.getEmail())
-                .setIssuedAt(Date.from(now))
-                .setExpiration(Date.from(expiration))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + expDuration))
                 .signWith(Keys.hmacShaKeyFor(sha256Secret.getBytes()), SignatureAlgorithm.HS256) // sign with secret key
                 .compact();
         // create JSON object
@@ -71,8 +71,7 @@ public class JwtService {
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(sha256Secret);
-        return Keys.hmacShaKeyFor(keyBytes);
+        return Keys.hmacShaKeyFor(sha256Secret.getBytes());
     }
 
     // generate only with userdetails
@@ -97,7 +96,8 @@ public class JwtService {
     }
 
     public Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        // return extractExpiration(token).before(new Date());
+        return false;
     }
 
     public Boolean isTokenValid(String token, UserDetails userDetails) {

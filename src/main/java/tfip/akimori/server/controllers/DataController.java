@@ -18,6 +18,7 @@ public class DataController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<String> hello() {
 
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
