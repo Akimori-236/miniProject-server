@@ -22,7 +22,7 @@ public class DataController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body("Hello World");
+                .body("Hello, World");
     }
 
 }
