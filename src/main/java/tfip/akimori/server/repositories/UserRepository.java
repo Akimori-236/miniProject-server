@@ -22,6 +22,7 @@ public class UserRepository {
     private final String SQL_FINDBYEMAIL = "SELECT * FROM users WHERE email=?";
     private final String SQL_INSERTUSER = "INSERT INTO users(firstname, lastname, email, password, role) VALUES (?, ?, ?, ?, ?)";
 
+
     @Autowired
     private JdbcTemplate template;
 
