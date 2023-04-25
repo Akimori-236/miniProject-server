@@ -12,38 +12,39 @@ import tfip.akimori.server.models.User;
 @Repository
 public class InstrumentRepository {
 
-    private final String SQL_GETINSTRUMENTSBYEMAIL = """
-            SELECT brand, model, serial_number, store_name, firstname, lastname FROM instruments
-            INNER JOIN store
-            ON instruments.store_id = store.store_id
-            INNER JOIN users
-            ON instruments.user_id = users.user_id
-            WHERE users.email=?;
-                    """;
+        private final String SQL_GETINSTRUMENTSBYEMAIL = """
+                        SELECT instrument_id, brand, model, serial_number, store_name, firstname, lastname FROM instruments
+                        INNER JOIN store
+                        ON instruments.store_id = store.store_id
+                        INNER JOIN users
+                        ON instruments.user_id = users.user_id
+                        WHERE users.email=?;
+                                """;
 
-    @Autowired
-    private JdbcTemplate template;
+        @Autowired
+        private JdbcTemplate template;
 
-    public List<Instrument> getBorrowedByEmail(String email) {
-        List<Instrument> instruments = template.query(
-                SQL_GETINSTRUMENTSBYEMAIL,
-                (rs, rowNum) -> {
-                    User user = User.builder()
-                            .firstname(rs.getString("firstname"))
-                            .lastname(rs.getString("lastname"))
-                            .email(email)
-                            .build();
-                    Instrument instrument = Instrument.builder()
-                            .brand(rs.getString("brand"))
-                            .model(rs.getString("model"))
-                            .serial_number(rs.getString("serial_number"))
-                            .store_name(rs.getString("store_name"))
-                            .user(user)
-                            .build();
-                    return instrument;
-                }, email);
+        public List<Instrument> getBorrowedByEmail(String email) {
+                List<Instrument> instruments = template.query(
+                                SQL_GETINSTRUMENTSBYEMAIL,
+                                (rs, rowNum) -> {
+                                        User user = User.builder()
+                                                        .firstname(rs.getString("firstname"))
+                                                        .lastname(rs.getString("lastname"))
+                                                        .email(email)
+                                                        .build();
+                                        Instrument instrument = Instrument.builder()
+                                                        .instrument_id(rs.getInt("instrument_id"))
+                                                        .brand(rs.getString("brand"))
+                                                        .model(rs.getString("model"))
+                                                        .serial_number(rs.getString("serial_number"))
+                                                        .store_name(rs.getString("store_name"))
+                                                        .user(user)
+                                                        .build();
+                                        return instrument;
+                                }, email);
 
-        return instruments;
-    }
+                return instruments;
+        }
 
 }

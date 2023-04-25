@@ -30,6 +30,7 @@ public class InstrumentService {
         // parse instruments into jObjects
         for (Instrument inst : instrumentList) {
             JsonObject jObj = Json.createObjectBuilder()
+                    .add("instrument_id", inst.getInstrument_id())
                     .add("brand", inst.getBrand())
                     .add("model", inst.getModel())
                     .add("serial_number", inst.getSerial_number())
