@@ -24,7 +24,7 @@ public class InstrumentRepository {
     @Autowired
     private JdbcTemplate template;
 
-    public List<Instrument> getBorrowedByUser(String email) {
+    public List<Instrument> getBorrowedByEmail(String email) {
         List<Instrument> instruments = template.query(
                 SQL_GETINSTRUMENTSBYEMAIL,
                 (rs, rowNum) -> {

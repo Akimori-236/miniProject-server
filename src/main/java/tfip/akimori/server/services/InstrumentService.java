@@ -24,7 +24,7 @@ public class InstrumentService {
         String email = jwtSvc.extractUsername(jwt);
         // System.out.println(email);
 
-        List<Instrument> instrumentList = instruRepo.getBorrowedByUser(email);
+        List<Instrument> instrumentList = instruRepo.getBorrowedByEmail(email);
         List<JsonObject> jList = new LinkedList<>();
 
         // parse instruments into jObjects
