@@ -37,6 +37,7 @@ public class JwtService {
         // create JWT
         String jwt = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
+                .setIssuer("ISMS")
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + expDuration))

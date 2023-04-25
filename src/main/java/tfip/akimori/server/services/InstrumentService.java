@@ -16,11 +16,18 @@ public class InstrumentService {
 
     @Autowired
     private InstrumentRepository instruRepo;
+    @Autowired
+    private JwtService jwtSvc;
 
-    public List<JsonObject> getBorrowedByEmail(String email) {
+    public List<JsonObject> getBorrowedByJWT(String jwt) {
+        // get email from JWT
+        String email = jwtSvc.extractUsername(jwt);
+        // System.out.println(email);
+
         List<Instrument> instrumentList = instruRepo.getBorrowedByUser(email);
         List<JsonObject> jList = new LinkedList<>();
 
+        // parse instruments into jObjects
         for (Instrument inst : instrumentList) {
             JsonObject jObj = Json.createObjectBuilder()
                     .add("brand", inst.getBrand())
