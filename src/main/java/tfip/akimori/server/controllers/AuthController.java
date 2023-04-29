@@ -5,11 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.json.JsonObject;
-import tfip.akimori.server.exceptions.DuplicateEmailException;
 import tfip.akimori.server.services.AuthService;
 
 @RestController
@@ -56,7 +54,7 @@ public class AuthController {
                 .body(jwt.toString());
     }
 
-    @PostMapping(path = "/google")
+    @PostMapping(path = "/register/google")
     public ResponseEntity<String> getCurrentUser(String oauthToken) {
 
         System.out.println(">>>>>>>>>>" + oauthToken);
