@@ -32,7 +32,6 @@ public class DataController {
         String jwt = token.substring(7, token.length());
 
         List<JsonObject> jList = instruSvc.getBorrowedByJWT(jwt);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -49,7 +48,6 @@ public class DataController {
         JsonObject response = Json.createObjectBuilder()
                 .add("store_created", isCreated)
                 .build();
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -63,7 +61,6 @@ public class DataController {
         String jwt = token.substring(7, token.length());
 
         List<JsonObject> jList = instruSvc.getStoresByJWT(jwt);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
