@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Instrument {
     private Integer instrument_id;
+    private String section;
     private String brand;
     private String model;
     private String serial_number;

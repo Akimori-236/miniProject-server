@@ -25,23 +25,43 @@ public class InstrumentService {
         // System.out.println(email);
 
         List<Instrument> instrumentList = instruRepo.getBorrowedByEmail(email);
+        return instrumentListToJsonObjectList(instrumentList);
+    }
+
+    public Boolean createStore(String jwt, String storeName) {
+        // what problems if stores have same name?
+
+        return null;
+    }
+
+    public List<JsonObject> getStoresByJWT(String jwt) {
+        // get email from JWT
+        String email = jwtSvc.extractUsername(jwt);
+        // System.out.println(email);
+
+        List<Instrument> instrumentList = instruRepo.getBorrowedByEmail(email);
+        return instrumentListToJsonObjectList(instrumentList);
+    }
+
+    private JsonObject instrumentToJsonObject(Instrument i) {
+        JsonObject jObj = Json.createObjectBuilder()
+                .add("instrument_id", i.getInstrument_id())
+                .add("brand", i.getBrand())
+                .add("model", i.getModel())
+                .add("serial_number", i.getSerial_number())
+                .add("store_name", i.getStore_name())
+                .add("firstname", i.getUser().getFirstname())
+                .add("lastname", i.getUser().getLastname())
+                .add("email", i.getUser().getEmail())
+                .build();
+        return jObj;
+    }
+
+    private List<JsonObject> instrumentListToJsonObjectList(List<Instrument> instrumentList) {
         List<JsonObject> jList = new LinkedList<>();
-
-        // parse instruments into jObjects
-        for (Instrument inst : instrumentList) {
-            JsonObject jObj = Json.createObjectBuilder()
-                    .add("instrument_id", inst.getInstrument_id())
-                    .add("brand", inst.getBrand())
-                    .add("model", inst.getModel())
-                    .add("serial_number", inst.getSerial_number())
-                    .add("store_name", inst.getStore_name())
-                    .add("firstname", inst.getUser().getFirstname())
-                    .add("lastname", inst.getUser().getLastname())
-                    .add("email", inst.getUser().getEmail())
-                    .build();
-            jList.add(jObj);
+        for (Instrument ins : instrumentList) {
+            jList.add(instrumentToJsonObject(ins));
         }
-
         return jList;
     }
 
