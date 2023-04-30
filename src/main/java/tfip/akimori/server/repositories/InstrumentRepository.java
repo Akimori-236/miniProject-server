@@ -1,5 +1,7 @@
 package tfip.akimori.server.repositories;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,21 +21,7 @@ public class InstrumentRepository implements SQLQueries {
                 List<Instrument> instruments = template.query(
                                 SQL_GETINSTRUMENTSBYEMAIL,
                                 (rs, rowNum) -> {
-                                        User user = User.builder()
-                                                        .firstname(rs.getString("firstname"))
-                                                        .lastname(rs.getString("lastname"))
-                                                        .email(email)
-                                                        .build();
-                                        Instrument instrument = Instrument.builder()
-                                                        .instrument_id(rs.getInt("instrument_id"))
-                                                        .section(rs.getString("section"))
-                                                        .brand(rs.getString("brand"))
-                                                        .model(rs.getString("model"))
-                                                        .serial_number(rs.getString("serial_number"))
-                                                        .store_name(rs.getString("store_name"))
-                                                        .user(user)
-                                                        .build();
-                                        return instrument;
+                                        return instrumentBuilder(rs);
                                 }, email);
 
                 return instruments;
@@ -43,23 +31,39 @@ public class InstrumentRepository implements SQLQueries {
                 List<Instrument> instruments = template.query(
                                 SQL_GETSTOREBYEMAIL,
                                 (rs, rowNum) -> {
-                                        User user = User.builder()
-                                                        .firstname(rs.getString("firstname"))
-                                                        .lastname(rs.getString("lastname"))
-                                                        .email(rs.getString("email"))
-                                                        .build();
-                                        Instrument instrument = Instrument.builder()
-                                                        .instrument_id(rs.getInt("instrument_id"))
-                                                        .section(rs.getString("section"))
-                                                        .brand(rs.getString("brand"))
-                                                        .model(rs.getString("model"))
-                                                        .serial_number(rs.getString("serial_number"))
-                                                        .store_name(rs.getString("store_name"))
-                                                        .user(user)
-                                                        .build();
-                                        return instrument;
+                                        return instrumentBuilder(rs);
                                 }, email);
 
                 return instruments;
+        }
+
+        private Instrument instrumentBuilder(ResultSet rs) {
+                User user;
+                try {
+                        user = User.builder()
+                                        .firstname(rs.getString("firstname"))
+                                        .lastname(rs.getString("lastname"))
+                                        .email(rs.getString("email"))
+                                        .build();
+                } catch (SQLException e) {
+                        System.err.println("FAILED BUILDING USER");
+                        return null;
+                }
+                Instrument instrument;
+                try {
+                        instrument = Instrument.builder()
+                                        .instrument_id(rs.getInt("instrument_id"))
+                                        .section(rs.getString("section"))
+                                        .brand(rs.getString("brand"))
+                                        .model(rs.getString("model"))
+                                        .serial_number(rs.getString("serial_number"))
+                                        .store_name(rs.getString("store_name"))
+                                        .user(user)
+                                        .build();
+                } catch (SQLException e) {
+                        System.err.println("FAILED BUILDING INSTRUMENT");
+                        return null;
+                }
+                return instrument;
         }
 }
