@@ -29,7 +29,7 @@ public class UserRepository implements SQLQueries{
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
             template.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement(SQL_INSERTUSER, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = connection.prepareStatement(SQL_INSERT_USER, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, user.getFirstname());
                 ps.setString(2, user.getLastname());
                 ps.setString(3, user.getEmail());

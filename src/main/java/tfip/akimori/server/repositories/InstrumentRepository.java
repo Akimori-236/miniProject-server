@@ -26,6 +26,7 @@ public class InstrumentRepository implements SQLQueries {
                                                         .build();
                                         Instrument instrument = Instrument.builder()
                                                         .instrument_id(rs.getInt("instrument_id"))
+                                                        .section(rs.getString("section"))
                                                         .brand(rs.getString("brand"))
                                                         .model(rs.getString("model"))
                                                         .serial_number(rs.getString("serial_number"))
@@ -49,6 +50,7 @@ public class InstrumentRepository implements SQLQueries {
                                                         .build();
                                         Instrument instrument = Instrument.builder()
                                                         .instrument_id(rs.getInt("instrument_id"))
+                                                        .section(rs.getString("section"))
                                                         .brand(rs.getString("brand"))
                                                         .model(rs.getString("model"))
                                                         .serial_number(rs.getString("serial_number"))
