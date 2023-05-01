@@ -53,7 +53,7 @@ public class InstrumentRepository implements SQLQueries {
                 try {
                         instrument = Instrument.builder()
                                         .instrument_id(rs.getInt("instrument_id"))
-                                        .section(rs.getString("section"))
+                                        .type(rs.getString("instrument_type"))
                                         .brand(rs.getString("brand"))
                                         .model(rs.getString("model"))
                                         .serial_number(rs.getString("serial_number"))

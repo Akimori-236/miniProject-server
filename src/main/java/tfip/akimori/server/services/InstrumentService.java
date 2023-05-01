@@ -46,6 +46,7 @@ public class InstrumentService {
     private JsonObject instrumentToJsonObject(Instrument i) {
         JsonObject jObj = Json.createObjectBuilder()
                 .add("instrument_id", i.getInstrument_id())
+                .add("type", i.getType())
                 .add("brand", i.getBrand())
                 .add("model", i.getModel())
                 .add("serial_number", i.getSerial_number())
