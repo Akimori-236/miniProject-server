@@ -24,7 +24,7 @@ public class UserRepository implements SQLQueries{
     @Autowired
     private JdbcTemplate template;
 
-    public Integer save(User user) throws DuplicateEmailException {
+    public Integer insertUser(User user) throws DuplicateEmailException {
         // System.out.println("PASSWORD>>>>>>>>" + user.getPassword());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
@@ -45,9 +45,9 @@ public class UserRepository implements SQLQueries{
         return (key == null) ? null : key.intValue();
     }
 
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
         try {
-            User user = template.queryForObject(SQL_FINDBYEMAIL, BeanPropertyRowMapper.newInstance(User.class), email);
+            User user = template.queryForObject(SQL_GETUSERBYEMAIL, BeanPropertyRowMapper.newInstance(User.class), email);
             return Optional.of(user);
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();

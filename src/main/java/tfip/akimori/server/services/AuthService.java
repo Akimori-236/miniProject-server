@@ -33,7 +33,7 @@ public class AuthService {
                                 .role(Role.USER)
                                 .build();
                 // System.out.println(newUser);
-                userRepo.save(newUser);
+                userRepo.insertUser(newUser);
                 // give new user JWT
                 return jwtSvc.generateJWT(newUser);
         }
@@ -44,7 +44,7 @@ public class AuthService {
                                                 request.getString("email"),
                                                 request.getString("password")));
                 // authenticated
-                User user = userRepo.findByEmail(request.getString("email"))
+                User user = userRepo.getUserByEmail(request.getString("email"))
                                 .orElseThrow();
                 return jwtSvc.generateJWT(user);
         }
