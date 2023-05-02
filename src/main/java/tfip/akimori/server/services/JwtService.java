@@ -39,6 +39,8 @@ public class JwtService {
                 .setHeaderParam("typ", "JWT")
                 .setIssuer("ISMS")
                 .setSubject(user.getEmail())
+                .claim("firstname", user.getFirstname())
+                .claim("lastname", user.getLastname())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + expDuration))
                 .signWith(Keys.hmacShaKeyFor(sha256Secret.getBytes()), SignatureAlgorithm.HS256) // sign with secret key
