@@ -40,6 +40,9 @@ public class InstrumentService {
         // System.out.println(email);
 
         List<Instrument> instrumentList = instruRepo.getBorrowedByEmail(email);
+        // sort instruments by store
+
+
         return instrumentListToJsonObjectList(instrumentList);
     }
 
@@ -66,4 +69,6 @@ public class InstrumentService {
         return jList;
     }
 
+    
+    // how to loan out to myself
 }
