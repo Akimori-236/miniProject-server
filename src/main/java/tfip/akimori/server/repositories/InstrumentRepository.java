@@ -1,7 +1,9 @@
 package tfip.akimori.server.repositories;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ public class InstrumentRepository implements SQLQueries {
 
         public List<Instrument> getBorrowedByEmail(String email) {
                 List<Instrument> instruments = template.query(
-                                SQL_GETINSTRUMENTSBYEMAIL,
+                                SQL_GETBORROWEDBYEMAIL,
                                 (rs, rowNum) -> {
                                         return instrumentBuilder(rs);
                                 }, email);
@@ -29,12 +31,26 @@ public class InstrumentRepository implements SQLQueries {
 
         public List<Instrument> getManagedInstrumentsByEmail(String email) {
                 List<Instrument> instruments = template.query(
-                                SQL_GETSTOREBYEMAIL,
+                                SQL_GETMANAGEDINSTRUMENTSBYEMAIL,
                                 (rs, rowNum) -> {
                                         return instrumentBuilder(rs);
                                 }, email);
 
                 return instruments;
+        }
+
+        public boolean insertInstrument(Instrument instr, int store_id) {
+                int rowsInserted = template.update(connection -> {
+                        PreparedStatement ps = connection.prepareStatement(SQL_INSERT_INSTRUMENT,
+                                        Statement.RETURN_GENERATED_KEYS);
+                        ps.setString(1, instr.getType());
+                        ps.setString(2, instr.getBrand());
+                        ps.setString(3, instr.getModel());
+                        ps.setString(4, instr.getSerial_number());
+                        ps.setInt(5, store_id);
+                        return ps;
+                });
+                return rowsInserted > 0;
         }
 
         private Instrument instrumentBuilder(ResultSet rs) {
