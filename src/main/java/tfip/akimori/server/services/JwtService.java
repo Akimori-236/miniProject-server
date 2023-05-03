@@ -6,23 +6,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-// import java.security.Key;
-// import java.util.HashMap;
-// import java.util.Map;
-// import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-// import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
-// import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.json.Json;
-// import io.jsonwebtoken.io.Decoders;
 import jakarta.json.JsonObject;
 import tfip.akimori.server.models.User;
 
@@ -39,8 +32,8 @@ public class JwtService {
                 .setHeaderParam("typ", "JWT")
                 .setIssuer("ISMS")
                 .setSubject(user.getEmail())
-                .claim("firstname", user.getFirstname())
-                .claim("lastname", user.getLastname())
+                .claim("givenname", user.getGivenname())
+                .claim("familyname", user.getFamilyname())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + expDuration))
                 .signWith(Keys.hmacShaKeyFor(sha256Secret.getBytes()), SignatureAlgorithm.HS256) // sign with secret key

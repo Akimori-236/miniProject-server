@@ -57,8 +57,8 @@ public class InstrumentRepository implements SQLQueries {
                 User user;
                 try {
                         user = User.builder()
-                                        .firstname(rs.getString("firstname"))
-                                        .lastname(rs.getString("lastname"))
+                                        .givenname(rs.getString("givenname"))
+                                        .familyname(rs.getString("familyname"))
                                         .email(rs.getString("email"))
                                         .build();
                 } catch (SQLException e) {

@@ -19,11 +19,12 @@ import lombok.NoArgsConstructor;
 public class User implements UserDetails {
     private Integer id;
 
-    private String firstname;
-    private String lastname;
+    private String givenname;
+    private String familyname;
     private String email;
     private String password;
     private Role role;
+    private Boolean isGoogleLogin;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

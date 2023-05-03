@@ -54,8 +54,8 @@ public class InstrumentService {
                 .add("model", i.getModel())
                 .add("serial_number", i.getSerial_number())
                 .add("store_name", i.getStore_name())
-                .add("firstname", i.getUser().getFirstname())
-                .add("lastname", i.getUser().getLastname())
+                .add("givenname", i.getUser().getGivenname())
+                .add("familyname", i.getUser().getFamilyname())
                 .add("email", i.getUser().getEmail())
                 .build();
         return jObj;
@@ -69,6 +69,6 @@ public class InstrumentService {
         return jList;
     }
 
-    
+
     // how to loan out to myself
 }
