@@ -34,18 +34,6 @@ public class InstrumentService {
         return null;
     }
 
-    public List<JsonObject> getStoresByJWT(String jwt) {
-        // get email from JWT
-        String email = jwtSvc.extractUsername(jwt);
-        // System.out.println(email);
-
-        List<Instrument> instrumentList = instruRepo.getBorrowedByEmail(email);
-        // sort instruments by store
-
-
-        return instrumentListToJsonObjectList(instrumentList);
-    }
-
     private JsonObject instrumentToJsonObject(Instrument i) {
         JsonObject jObj = Json.createObjectBuilder()
                 .add("instrument_id", i.getInstrument_id())

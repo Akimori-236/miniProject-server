@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -22,11 +21,13 @@ import tfip.akimori.server.models.User;
 @Service
 public class JwtService {
 
+    // 3 hours
+    private static final Long expDuration = 1000l * 60 * 60 * 3;
+
     @Value("${sha256.secret}")
     private String sha256Secret;
 
     public JsonObject generateJWT(User user) {
-        Long expDuration = 1000l * 60 * 60;
         // create JWT
         String jwt = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
