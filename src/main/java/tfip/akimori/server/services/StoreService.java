@@ -39,7 +39,7 @@ public class StoreService {
         return storeRepo.getManagedStores(email);
     }
 
-    public JsonObject getStoreManagers(String jwt) {
+    public List<JsonObject> getStoreManagers(String jwt) {
         // get email from JWT
         String email = jwtSvc.extractUsername(jwt);
         List<Store> sList = storeRepo.getStoreManagers(email);
@@ -56,7 +56,8 @@ public class StoreService {
                 .build();
     }
 
-    private static JsonObject sortManager(List<Store> storeList) {
+    private static List<JsonObject> sortManager(List<Store> storeList) {
+        List<JsonObject> jList = new LinkedList<>();
         Map<String, List<User>> storeMap = new HashMap<>();
         for (Store s : storeList) {
             if (!storeMap.containsKey(s.getStore_name())) {
@@ -66,8 +67,8 @@ public class StoreService {
                 storeMap.get(s.getStore_name()).add(s.getUser());
             }
         }
-        JsonObjectBuilder jObj = Json.createObjectBuilder();
         for (String s : storeMap.keySet()) {
+            JsonObjectBuilder job = Json.createObjectBuilder();
             JsonArrayBuilder jab = Json.createArrayBuilder();
             for (User u : storeMap.get(s)) {
                 jab.add(Json.createObjectBuilder()
@@ -75,10 +76,11 @@ public class StoreService {
                         .add("givenname", u.getGivenname())
                         .add("familyname", u.getFamilyname()));
             }
-            jObj.add(s, jab);
-
+            job.add("storeName", s);
+            job.add("managers", jab);
+            jList.add(job.build());
         }
         System.out.println(storeMap);
-        return jObj.build();
+        return jList;
     }
 }

@@ -75,7 +75,7 @@ public class DataController {
                         @RequestHeader(name = "Authorization") String token) {
                 String jwt = token.substring(7, token.length());
 
-                JsonObject storeList = storeSvc.getStoreManagers(jwt);
+                List<JsonObject> storeList = storeSvc.getStoreManagers(jwt);
                 return ResponseEntity
                                 .status(HttpStatus.OK)
                                 .contentType(MediaType.APPLICATION_JSON)
