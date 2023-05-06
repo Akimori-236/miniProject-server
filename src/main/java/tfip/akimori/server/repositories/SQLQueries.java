@@ -47,7 +47,7 @@ public interface SQLQueries {
                         """;
 
         public static final String SQL_GETMANAGEDSTORES = """
-                        SELECT s.store_name
+                        SELECT s.store_id, s.store_name
                         FROM stores s
                         INNER JOIN managers m
                         ON s.store_id = m.store_id
@@ -57,7 +57,7 @@ public interface SQLQueries {
                         """;
 
         public static final String SQL_GETSTOREMANAGERS = """
-                        SELECT store_name, email, givenname, familyname
+                        SELECT s2.store_id, store_name, email, givenname, familyname
                         FROM managers m
                         INNER JOIN
                         (SELECT s.store_id

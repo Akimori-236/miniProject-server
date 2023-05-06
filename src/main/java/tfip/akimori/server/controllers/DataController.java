@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ public class DataController {
         @GetMapping(path = "/borrowed")
         public ResponseEntity<String> getBorrowedByJWT(
                         @RequestHeader(name = "Authorization") String token) {
-
+                System.out.println("GETTING BORROWED");
                 String jwt = token.substring(7, token.length());
 
                 List<JsonObject> jList = instruSvc.getBorrowedByJWT(jwt);
@@ -43,22 +44,9 @@ public class DataController {
                                 .body(jList.toString());
         }
 
-        @GetMapping(path = "/store")
-        public ResponseEntity<String> getStoresByJWT(
-                        @RequestHeader(name = "Authorization") String token) {
-                String jwt = token.substring(7, token.length());
-
-                List<String> storeList = storeSvc.getManagedStores(jwt);
-                return ResponseEntity
-                                .status(HttpStatus.OK)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .body(storeList.toString());
-        }
-
         @PostMapping(path = "/store/create")
         public ResponseEntity<String> createStore(@RequestHeader(name = "Authorization") String token,
                         @RequestParam String storename) {
-                System.out.println("TOKEN: " + token);
                 System.out.println("CREATING STORE: " + storename);
                 if (storename == null) {
                         return ResponseEntity
@@ -88,12 +76,31 @@ public class DataController {
                                 .body(isCreated.toString());
         }
 
-        @GetMapping(path = "/store/managers")
-        public ResponseEntity<String> getStoresManagersByJWT(
+        @GetMapping(path = "/store")
+        public ResponseEntity<String> getStoresByJWT(
                         @RequestHeader(name = "Authorization") String token) {
+                System.out.println("GETTING STORES");
                 String jwt = token.substring(7, token.length());
 
-                List<JsonObject> storeList = storeSvc.getStoreManagers(jwt);
+                List<JsonObject> storeList = storeSvc.getManagedStores(jwt);
+                return ResponseEntity
+                                .status(HttpStatus.OK)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .body(storeList.toString());
+        }
+
+        @GetMapping(path = "/store/{storeID}")
+        public ResponseEntity<String> getStoresDetails(
+                        @RequestHeader(name = "Authorization") String token,
+                        @PathVariable Integer storeID) {
+                System.out.println("GETTING DETAILS OF STORE: " + storeID);
+                String jwt = token.substring(7, token.length());
+
+                // CHECK IF MANAGER OF STORE
+
+                // GET DATA
+                List<JsonObject> storeList = storeSvc.getManagedStores(jwt);
+
                 return ResponseEntity
                                 .status(HttpStatus.OK)
                                 .contentType(MediaType.APPLICATION_JSON)
