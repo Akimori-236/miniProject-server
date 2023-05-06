@@ -27,8 +27,11 @@ public class StoreService {
     private JwtService jwtSvc;
 
     @Transactional(rollbackFor = SQLException.class)
-    public boolean insertStore(String email, String store_name) throws SQLException {
-        int store_id = storeRepo.insertStore(store_name);
+    public boolean createStore(String jwt, String store_name) throws SQLException {
+        // get email from JWT
+        String email = jwtSvc.extractUsername(jwt);
+
+        int store_id = storeRepo.createStore(store_name);
         boolean isInserted = storeRepo.insertStoreManager(email, store_id);
         return isInserted;
     }

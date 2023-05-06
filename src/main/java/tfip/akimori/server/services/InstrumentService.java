@@ -28,12 +28,6 @@ public class InstrumentService {
         return instrumentListToJsonObjectList(instrumentList);
     }
 
-    public Boolean createStore(String jwt, String storeName) {
-        // what problems if stores have same name?
-
-        return null;
-    }
-
     private JsonObject instrumentToJsonObject(Instrument i) {
         JsonObject jObj = Json.createObjectBuilder()
                 .add("instrument_id", i.getInstrument_id())

@@ -21,10 +21,10 @@ public class StoreRepository implements SQLQueries {
     @Autowired
     private JdbcTemplate template;
 
-    public Integer insertStore(String store_name) throws SQLException {
+    public Integer createStore(String store_name) throws SQLException {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         template.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(SQL_INSERT_USER, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(SQL_INSERT_STORE, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, store_name);
             return ps;
         }, keyHolder);
