@@ -11,8 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import tfip.akimori.server.models.Instrument;
 import tfip.akimori.server.models.Store;
+import tfip.akimori.server.models.User;
 import tfip.akimori.server.repositories.StoreRepository;
+import tfip.akimori.server.utils.MyUtils;
 
 @Service
 public class StoreService {
@@ -40,17 +43,32 @@ public class StoreService {
         List<Store> storeList = storeRepo.getManagedStores(email);
         List<JsonObject> outputList = new LinkedList<>();
         for (Store s : storeList) {
-            outputList.add(storeToJson(s));
+            outputList.add(MyUtils.storeToJson(s));
         }
         return outputList;
     }
 
-    private static JsonObject storeToJson(Store s) {
-        return Json.createObjectBuilder()
-                .add("store_id", s.getStore_id())
-                .add("store_name", s.getStore_name())
-                .build();
+    public JsonObject getStoreDetails(String jwt, String storeID) {
+        // get email from JWT
+        String email = jwtSvc.extractUsername(jwt);
+        // verify store manager
+        if (storeRepo.isManagerOfStore(email, storeID)) {
+            // get all store managers
+            List<User> managerList = this.storeRepo.getStoreManagers(storeID);
+            // get all instruments
+            List<Instrument> instrumentList = this.storeRepo.getStoreInstruments(storeID);
+            // build json
+            return Json.createObjectBuilder()
+                    .add("managers", MyUtils.userListToJAB(managerList))
+                    .add("instruments", MyUtils.instrumentListToJAB(instrumentList))
+                    .build();
+        } else {
+            // not a manager of the store
+            return null;
+        }
     }
+
+    // ==============================
 
     // private static List<JsonObject> sortManager(List<Store> storeList) {
     // // sorting

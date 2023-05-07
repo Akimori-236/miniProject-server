@@ -26,84 +26,86 @@ import tfip.akimori.server.services.StoreService;
 @RequestMapping(path = "/api/data")
 public class DataController {
 
-        @Autowired
-        private InstrumentService instruSvc;
-        @Autowired
-        private StoreService storeSvc;
+    @Autowired
+    private InstrumentService instruSvc;
+    @Autowired
+    private StoreService storeSvc;
 
-        @GetMapping(path = "/borrowed")
-        public ResponseEntity<String> getBorrowedByJWT(
-                        @RequestHeader(name = "Authorization") String token) {
-                System.out.println("GETTING BORROWED");
-                String jwt = token.substring(7, token.length());
+    @GetMapping(path = "/borrowed")
+    public ResponseEntity<String> getBorrowedByJWT(
+            @RequestHeader(name = "Authorization") String token) {
+        System.out.println("GETTING BORROWED");
+        String jwt = token.substring(7, token.length());
 
-                List<JsonObject> jList = instruSvc.getBorrowedByJWT(jwt);
-                return ResponseEntity
-                                .status(HttpStatus.OK)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .body(jList.toString());
+        JsonObject jList = instruSvc.getBorrowedByJWT(jwt);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(jList.toString());
+    }
+
+    @PostMapping(path = "/store/create")
+    public ResponseEntity<String> createStore(@RequestHeader(name = "Authorization") String token,
+            @RequestParam String storename) {
+        System.out.println("CREATING STORE: " + storename);
+        if (storename == null) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body("\"message\": \"Please include 'storeName' query parameter\"");
         }
+        String jwt = token.substring(7, token.length());
 
-        @PostMapping(path = "/store/create")
-        public ResponseEntity<String> createStore(@RequestHeader(name = "Authorization") String token,
-                        @RequestParam String storename) {
-                System.out.println("CREATING STORE: " + storename);
-                if (storename == null) {
-                        return ResponseEntity
-                                        .status(HttpStatus.BAD_REQUEST)
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .body("\"message\": \"Please include 'storeName' query parameter\"");
-                }
-                String jwt = token.substring(7, token.length());
-
-                Boolean isCreated;
-                try {
-                        isCreated = storeSvc.createStore(jwt, storename);
-                } catch (SQLException e) {
-                        String response = Json.createObjectBuilder().add("message", "Error creating new store").build()
-                                        .toString();
-                        return ResponseEntity
-                                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .body(response);
-                }
-                // JsonObject response = Json.createObjectBuilder()
-                // .add("store_created", isCreated)
-                // .build();
-                return ResponseEntity
-                                .status(HttpStatus.OK)
-                                // .contentType(MediaType.APPLICATION_JSON)
-                                .body(isCreated.toString());
+        Boolean isCreated;
+        try {
+            isCreated = storeSvc.createStore(jwt, storename);
+        } catch (SQLException e) {
+            String response = Json.createObjectBuilder().add("message", "Error creating new store").build()
+                    .toString();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
         }
+        // JsonObject response = Json.createObjectBuilder()
+        // .add("store_created", isCreated)
+        // .build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                // .contentType(MediaType.APPLICATION_JSON)
+                .body(isCreated.toString());
+    }
 
-        @GetMapping(path = "/store")
-        public ResponseEntity<String> getStoresByJWT(
-                        @RequestHeader(name = "Authorization") String token) {
-                System.out.println("GETTING STORES");
-                String jwt = token.substring(7, token.length());
+    @GetMapping(path = "/store")
+    public ResponseEntity<String> getStoresByJWT(
+            @RequestHeader(name = "Authorization") String token) {
+        System.out.println("GETTING STORES");
+        String jwt = token.substring(7, token.length());
 
-                List<JsonObject> storeList = storeSvc.getManagedStores(jwt);
-                return ResponseEntity
-                                .status(HttpStatus.OK)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .body(storeList.toString());
+        List<JsonObject> storeList = storeSvc.getManagedStores(jwt);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(storeList.toString());
+    }
+
+    @GetMapping(path = "/store/{storeID}")
+    public ResponseEntity<String> getStoreDetails(
+            @RequestHeader(name = "Authorization") String token,
+            @PathVariable String storeID) {
+        System.out.println("GETTING DETAILS OF STORE: " + storeID);
+        String jwt = token.substring(7, token.length());
+        // GET DATA
+        JsonObject data = storeSvc.getStoreDetails(jwt, storeID);
+        if (data == null) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Not a manager of the store");
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(data.toString());
         }
-
-        @GetMapping(path = "/store/{storeID}")
-        public ResponseEntity<String> getStoresDetails(
-                        @RequestHeader(name = "Authorization") String token,
-                        @PathVariable Integer storeID) {
-                System.out.println("GETTING DETAILS OF STORE: " + storeID);
-                String jwt = token.substring(7, token.length());
-
-                // CHECK IF MANAGER OF STORE
-
-                // GET DATA
-                List<JsonObject> storeList = storeSvc.getManagedStores(jwt);
-
-                return ResponseEntity
-                                .status(HttpStatus.OK)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .body(storeList.toString());
-        }
+    }
 }

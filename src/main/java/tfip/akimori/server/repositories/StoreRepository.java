@@ -12,13 +12,17 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import tfip.akimori.server.models.Instrument;
 import tfip.akimori.server.models.Store;
+import tfip.akimori.server.models.User;
 
 @Repository
 public class StoreRepository implements SQLQueries {
 
     @Autowired
     private JdbcTemplate template;
+
+    // CREATE
 
     public boolean createStore(String store_id, String store_name, String creator_email) throws SQLException {
         // KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -53,6 +57,8 @@ public class StoreRepository implements SQLQueries {
         return rowsInserted == 1;
     }
 
+    // READ
+
     public List<Store> getManagedStores(String email) {
         return template.query(SQL_GETMANAGEDSTORES,
                 BeanPropertyRowMapper.newInstance(Store.class),
@@ -60,29 +66,19 @@ public class StoreRepository implements SQLQueries {
     }
 
     public Boolean isManagerOfStore(String email, String storeID) {
-        return 1 == template.update(SQL_CHECK_ISMANAGEROFSTORE, storeID, email);
+        return template.queryForObject(SQL_CHECK_ISMANAGEROFSTORE, Boolean.class, storeID, email);
     }
 
-    // public List<Store> getStoreDetails(Integer store_id) {
-    // List<Store> storeList = template.query(
-    // SQL_GETSTOREMANAGERS, (rs, rowNum) -> {
-    // return storeBuilder(rs);
-    // }, store_id);
-    // return storeList;
-    // }
+    public List<Instrument> getStoreInstruments(String storeID) {
+        return template.query(SQL_GETSTOREINSTRUMENTS,
+                BeanPropertyRowMapper.newInstance(Instrument.class),
+                storeID);
+    }
 
-    // private static Store storeBuilder(ResultSet rs) {
-    // Store store;
-    // try {
-    // store = Store.builder()
-    // .store_id(rs.getInt("store_id"))
-    // .store_name(rs.getString("store_name"))
-    // .build();
+    public List<User> getStoreManagers(String storeID) {
+        return template.query(SQL_GETSTOREMANAGERS,
+                BeanPropertyRowMapper.newInstance(User.class),
+                storeID);
+    }
 
-    // } catch (SQLException e) {
-    // System.err.println("FAILED BUILDING STORE");
-    // return null;
-    // }
-    // return store;
-    // }
 }

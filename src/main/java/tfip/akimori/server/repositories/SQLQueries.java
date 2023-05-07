@@ -9,13 +9,13 @@ public interface SQLQueries {
             INSERT INTO stores(store_id, store_name, creator_id)
             VALUES(? ,? ,(
             SELECT user_id FROM users
-            WHERE email=?));
+            WHERE email = ?));
                 """; // must be executed with INSERT MANAGER
     public static final String SQL_INSERT_MANAGER = """
             INSERT INTO managers(manager_id, store_id) VALUES((
             SELECT user_id
             FROM users
-            WHERE email=?), ?)
+            WHERE email = ?), ?)
             """; // email, store_id
     public static final String SQL_INSERT_INSTRUMENT = """
             INSERT INTO instruments(instrument_type, brand, model, serial_number, store_id, outForRepair)
@@ -24,7 +24,7 @@ public interface SQLQueries {
 
     // READ
     public static final String SQL_GETUSERBYEMAIL = """
-            SELECT * FROM users WHERE email=?
+            SELECT * FROM users WHERE email = ?
             """;
     public static final String SQL_GETMANAGEDINSTRUMENTSBYEMAIL = """
             SELECT instrument_id, instrument_type, brand, model, serial_number, store_name, u2.givenname, u2.familyname, u2.email
@@ -37,7 +37,7 @@ public interface SQLQueries {
             ON m.manager_id = u.user_id
             LEFT JOIN users u2
             ON i.user_id = u2.user_id
-            WHERE u.email=?
+            WHERE u.email = ?
             """;
     public static final String SQL_GETBORROWEDBYEMAIL = """
             SELECT instrument_id, instrument_type, brand, model, serial_number, store_name, givenname, familyname, email
@@ -46,7 +46,7 @@ public interface SQLQueries {
             ON i.store_id = s.store_id
             INNER JOIN users u
             ON i.user_id = u.user_id
-            WHERE u.email=?
+            WHERE u.email = ?
             """;
 
     public static final String SQL_GETMANAGEDSTORES = """
@@ -56,7 +56,7 @@ public interface SQLQueries {
             ON s.store_id = m.store_id
             INNER JOIN users u
             ON m.manager_id = u.user_id
-            WHERE u.email=?;
+            WHERE u.email = ?
             """;
 
     // public static final String SQL_GETSTOREMANAGERS = """
@@ -81,18 +81,31 @@ public interface SQLQueries {
             SELECT COUNT(*) FROM stores
             WHERE store_id = ? AND creator_id = (
             SELECT user_id FROM users
-            WHERE email=?);
+            WHERE email = ?)
             """;
 
     public static final String SQL_CHECK_ISMANAGEROFSTORE = """
             SELECT COUNT(*) FROM managers
             WHERE store_id = ? AND manager_id = (
             SELECT user_id FROM users
-            WHERE email=?);
+            WHERE email = ?)
             """;
 
-    public static final String SQL_GETSTOREDETAILS = """
+    public static final String SQL_GETSTOREINSTRUMENTS = """
+            SELECT instrument_id, instrument_type, brand, model, serial_number, isRepairing, email, givenname, familyname
+            FROM instruments i
+            INNER JOIN stores s
+            ON i.store_id = s.store_id
+            LEFT JOIN users u
+            ON i.user_id = u.user_id
+            WHERE s.store_id = ?
+            """;
 
+    public static final String SQL_GETSTOREMANAGERS = """
+            SELECT email, givenname, familyname FROM managers m
+            INNER JOIN users u
+            ON m.manager_id = u.user_id
+            WHERE m.store_id = ?
             """;
 
     // UPDATE

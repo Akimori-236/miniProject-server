@@ -10,12 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Instrument {
-    private Integer instrument_id;
-    private String type;
+    private String instrument_id;
+    private String instrument_type;
     private String brand;
     private String model;
     private String serial_number;
-    private String store_id;
     private String store_name;
-    private User user;
+    private boolean isRepairing;
+    private String email;
+    private String givenname;
+    private String familyname;
 }
