@@ -37,7 +37,7 @@ public class DataController {
         System.out.println("GETTING BORROWED");
         String jwt = token.substring(7, token.length());
 
-        JsonObject jList = instruSvc.getBorrowedByJWT(jwt);
+        List<JsonObject> jList = instruSvc.getBorrowedByJWT(jwt);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)

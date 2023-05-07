@@ -1,5 +1,6 @@
 package tfip.akimori.server.services;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,18 @@ public class InstrumentService {
     @Autowired
     private JwtService jwtSvc;
 
-    public JsonObject getBorrowedByJWT(String jwt) {
+    public List<JsonObject> getBorrowedByJWT(String jwt) {
         // get email from JWT
         String email = jwtSvc.extractUsername(jwt);
         // System.out.println(email);
 
         List<Instrument> instrumentList = instruRepo.getBorrowedByEmail(email);
-        return MyUtils.instrumentListToJAB(instrumentList).build().asJsonObject();
+        List<JsonObject> jList = new LinkedList<>();
+        for (Instrument i : instrumentList) {
+            jList.add(MyUtils.instrumentToJOB(i).build());
+        }
+        return jList;
     }
 
-    // how to loan out to myself
+    // how to loan out to myself?
 }

@@ -27,7 +27,7 @@ public interface SQLQueries {
             SELECT * FROM users WHERE email = ?
             """;
     public static final String SQL_GETMANAGEDINSTRUMENTSBYEMAIL = """
-            SELECT instrument_id, instrument_type, brand, model, serial_number, store_name, u2.givenname, u2.familyname, u2.email
+            SELECT instrument_id, instrument_type, brand, model, serial_number, store_id, store_name, isRepairing, u2.givenname, u2.familyname, u2.email
             FROM instruments i
             INNER JOIN stores s
             ON i.store_id = s.store_id
@@ -40,7 +40,7 @@ public interface SQLQueries {
             WHERE u.email = ?
             """;
     public static final String SQL_GETBORROWEDBYEMAIL = """
-            SELECT instrument_id, instrument_type, brand, model, serial_number, store_name, givenname, familyname, email
+            SELECT instrument_id, instrument_type, brand, model, serial_number, i.store_id, store_name, isRepairing, givenname, familyname, email
             FROM instruments i
             INNER JOIN stores s
             ON i.store_id = s.store_id
@@ -92,7 +92,7 @@ public interface SQLQueries {
             """;
 
     public static final String SQL_GETSTOREINSTRUMENTS = """
-            SELECT instrument_id, instrument_type, brand, model, serial_number, isRepairing, email, givenname, familyname
+            SELECT instrument_id, instrument_type, brand, model, serial_number, i.store_id, store_name, isRepairing, email, givenname, familyname
             FROM instruments i
             INNER JOIN stores s
             ON i.store_id = s.store_id

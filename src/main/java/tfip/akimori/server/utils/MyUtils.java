@@ -80,14 +80,11 @@ public class MyUtils {
                 .add("instrument_type", i.getInstrument_type())
                 .add("brand", i.getBrand())
                 .add("model", i.getModel())
-                .add("serial_number", i.getSerial_number());
-        if (null != i.getStore_name()) {
-            job.add("store_name", i.getStore_name());
-        }
-        if (i.isRepairing() || !i.isRepairing()) {
-            job.add("isRepairing", i.isRepairing());
-        }
+                .add("serial_number", i.getSerial_number())
+                .add("store_name", i.getStore_name())
+                .add("isRepairing", i.isRepairing());
         if (null != i.getEmail()) {
+            // if not loaned out
             job.add("email", i.getEmail())
                     .add("givenname", i.getGivenname())
                     .add("familyname", i.getFamilyname());
