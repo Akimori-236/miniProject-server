@@ -27,7 +27,7 @@ public class StoreService {
         // get email from JWT
         String email = jwtSvc.extractUsername(jwt);
         // Generate storeID
-        String storeID = UUID.randomUUID().toString().substring(8);
+        String storeID = UUID.randomUUID().toString().substring(0, 8);
         // rollback these >
         storeRepo.createStore(storeID, store_name, email);
         boolean isInserted = storeRepo.insertStoreManager(email, storeID);

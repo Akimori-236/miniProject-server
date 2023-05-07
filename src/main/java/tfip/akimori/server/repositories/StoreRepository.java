@@ -20,17 +20,23 @@ public class StoreRepository implements SQLQueries {
     @Autowired
     private JdbcTemplate template;
 
-    public Integer createStore(String store_id, String store_name, String creator_email) throws SQLException {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        template.update(connection -> {
+    public boolean createStore(String store_id, String store_name, String creator_email) throws SQLException {
+        // KeyHolder keyHolder = new GeneratedKeyHolder();
+        System.out.println("NEW STORE ID: " + store_id);
+        int rowsInserted = template.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(SQL_INSERT_STORE, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, store_id);
             ps.setString(2, store_name);
             ps.setString(3, creator_email);
             return ps;
-        }, keyHolder);
-        Number key = keyHolder.getKey();
-        return key.intValue();
+        }
+        // , keyHolder
+        );
+        // Number key = keyHolder.getKey();
+        if (rowsInserted != 1) {
+            throw new SQLException("Error inserting into stores table");
+        }
+        return rowsInserted == 1;
 
     }
 
@@ -41,7 +47,10 @@ public class StoreRepository implements SQLQueries {
             ps.setString(2, store_id);
             return ps;
         });
-        return rowsInserted > 0;
+        if (rowsInserted != 1) {
+            throw new SQLException("Error inserting into managers table");
+        }
+        return rowsInserted == 1;
     }
 
     public List<Store> getManagedStores(String email) {

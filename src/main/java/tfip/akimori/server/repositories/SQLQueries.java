@@ -7,7 +7,7 @@ public interface SQLQueries {
             """;
     public static final String SQL_INSERT_STORE = """
             INSERT INTO stores(store_id, store_name, creator_id)
-            VALUES(?,?,(
+            VALUES(? ,? ,(
             SELECT user_id FROM users
             WHERE email=?));
                 """; // must be executed with INSERT MANAGER
