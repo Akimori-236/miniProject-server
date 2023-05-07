@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Store {
-    private int store_id;
+    private String store_id;
     private String store_name;
 }

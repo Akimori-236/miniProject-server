@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 
-import jakarta.json.Json;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
 import tfip.akimori.server.configs.GoogleVerifier;
 import tfip.akimori.server.exceptions.DuplicateEmailException;
 import tfip.akimori.server.services.AuthService;

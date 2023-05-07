@@ -20,11 +20,13 @@ public class StoreRepository implements SQLQueries {
     @Autowired
     private JdbcTemplate template;
 
-    public Integer createStore(String store_name) throws SQLException {
+    public Integer createStore(String store_id, String store_name, String creator_email) throws SQLException {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         template.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(SQL_INSERT_STORE, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, store_name);
+            ps.setString(1, store_id);
+            ps.setString(2, store_name);
+            ps.setString(3, creator_email);
             return ps;
         }, keyHolder);
         Number key = keyHolder.getKey();
@@ -32,11 +34,11 @@ public class StoreRepository implements SQLQueries {
 
     }
 
-    public boolean insertStoreManager(String email, int store_id) throws SQLException {
+    public boolean insertStoreManager(String email, String store_id) throws SQLException {
         int rowsInserted = template.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(SQL_INSERT_MANAGER, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, email);
-            ps.setInt(2, store_id);
+            ps.setString(2, store_id);
             return ps;
         });
         return rowsInserted > 0;
@@ -48,26 +50,30 @@ public class StoreRepository implements SQLQueries {
                 email);
     }
 
+    public Boolean isManagerOfStore(String email, String storeID) {
+        return 1 == template.update(SQL_CHECK_ISMANAGEROFSTORE, storeID, email);
+    }
+
     // public List<Store> getStoreDetails(Integer store_id) {
-    //     List<Store> storeList = template.query(
-    //             SQL_GETSTOREMANAGERS, (rs, rowNum) -> {
-    //                 return storeBuilder(rs);
-    //             }, store_id);
-    //     return storeList;
+    // List<Store> storeList = template.query(
+    // SQL_GETSTOREMANAGERS, (rs, rowNum) -> {
+    // return storeBuilder(rs);
+    // }, store_id);
+    // return storeList;
     // }
 
     // private static Store storeBuilder(ResultSet rs) {
-    //     Store store;
-    //     try {
-    //         store = Store.builder()
-    //                 .store_id(rs.getInt("store_id"))
-    //                 .store_name(rs.getString("store_name"))
-    //                 .build();
+    // Store store;
+    // try {
+    // store = Store.builder()
+    // .store_id(rs.getInt("store_id"))
+    // .store_name(rs.getString("store_name"))
+    // .build();
 
-    //     } catch (SQLException e) {
-    //         System.err.println("FAILED BUILDING STORE");
-    //         return null;
-    //     }
-    //     return store;
+    // } catch (SQLException e) {
+    // System.err.println("FAILED BUILDING STORE");
+    // return null;
+    // }
+    // return store;
     // }
 }

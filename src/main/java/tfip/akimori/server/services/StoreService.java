@@ -3,6 +3,8 @@ package tfip.akimori.server.services;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +26,11 @@ public class StoreService {
     public boolean createStore(String jwt, String store_name) throws SQLException {
         // get email from JWT
         String email = jwtSvc.extractUsername(jwt);
+        // Generate storeID
+        String storeID = UUID.randomUUID().toString().substring(8);
         // rollback these >
-        int store_id = storeRepo.createStore(store_name);
-        boolean isInserted = storeRepo.insertStoreManager(email, store_id);
+        storeRepo.createStore(storeID, store_name, email);
+        boolean isInserted = storeRepo.insertStoreManager(email, storeID);
         return isInserted;
     }
 
