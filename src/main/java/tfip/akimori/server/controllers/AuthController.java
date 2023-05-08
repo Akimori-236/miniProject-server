@@ -40,7 +40,6 @@ public class AuthController {
             System.err.println(e);
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
-                    .contentType(MediaType.APPLICATION_JSON)
                     .body("User already registered, please log in");
         }
         return ResponseEntity
