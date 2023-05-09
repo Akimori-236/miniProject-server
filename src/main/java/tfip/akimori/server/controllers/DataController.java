@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import tfip.akimori.server.models.Instrument;
 import tfip.akimori.server.services.InstrumentService;
 import tfip.akimori.server.services.StoreService;
 
@@ -107,5 +109,18 @@ public class DataController {
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(data.toString());
         }
+    }
+
+    @PostMapping(path = "/store/{storeID}/addinstrument")
+    public ResponseEntity<String> addInstrument(
+            @RequestHeader(name = "Authorization") String token,
+            @PathVariable String storeID,
+            @RequestBody String instrument) {
+        System.out.println("ADDING INSTRUMENT TO STORE: " + storeID);
+        System.out.println(instrument);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("");
     }
 }
