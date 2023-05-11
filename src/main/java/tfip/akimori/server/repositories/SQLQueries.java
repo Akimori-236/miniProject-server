@@ -18,8 +18,8 @@ public interface SQLQueries {
             WHERE email = ?), ?)
             """; // email, store_id
     public static final String SQL_INSERT_INSTRUMENT = """
-            INSERT INTO instruments(instrument_type, brand, model, serial_number, store_id, outForRepair)
-            VALUES(?, ?, ?, ?, ?, 0)
+            INSERT INTO instruments(instrument_id, instrument_type, brand, model, serial_number, store_id, isRepairing)
+            VALUES(?, ?, ?, ?, ?, ?, ?)
             """;
 
     // READ

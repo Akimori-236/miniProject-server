@@ -20,6 +20,8 @@ import tfip.akimori.server.repositories.UserRepository;
 @Service
 public class AuthService {
 
+    private final static int RANDOM_PW_LENGTH = 15;
+
     @Autowired
     private UserRepository userRepo;
     @Autowired
@@ -65,7 +67,7 @@ public class AuthService {
                 .add("picture", (String) payload.get("picture"))
                 .add("familyname", (String) payload.get("family_name"))
                 .add("givenname", (String) payload.get("given_name"))
-                .add("password", this.generateRandomPassword())
+                .add("password", generateRandomPassword(RANDOM_PW_LENGTH))
                 .add("isGoogleLogin", true)
                 .build();
         System.out.println(googleUser);
@@ -90,12 +92,12 @@ public class AuthService {
         return jwtSvc.generateJWT(user);
     }
 
-    private static String generateRandomPassword() {
+    private static String generateRandomPassword(int length) {
         String randPw = UUID.randomUUID()
                 .toString()
                 .replace("-", "")
                 .replace("_", "")
-                .substring(0, 15);
+                .substring(0, length);
         System.out.println("Random password generated: " + randPw);
         return randPw;
     }

@@ -15,6 +15,7 @@ public class Instrument {
     private String brand;
     private String model;
     private String serial_number;
+    private String store_id;
     private String store_name;
     private boolean isRepairing;
     private String email;

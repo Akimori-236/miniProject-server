@@ -1,5 +1,6 @@
 package tfip.akimori.server.controllers;
 
+import java.io.StringReader;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
-import tfip.akimori.server.models.Instrument;
+import jakarta.json.JsonReader;
 import tfip.akimori.server.services.InstrumentService;
 import tfip.akimori.server.services.StoreService;
 
@@ -115,12 +116,21 @@ public class DataController {
     public ResponseEntity<String> addInstrument(
             @RequestHeader(name = "Authorization") String token,
             @PathVariable String storeID,
-            @RequestBody String instrument) {
+            @RequestBody String dataString) {
+        String jwt = token.substring(7, token.length());
         System.out.println("ADDING INSTRUMENT TO STORE: " + storeID);
-        System.out.println(instrument);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body("");
+        JsonReader jr = Json.createReader(new StringReader(dataString));
+        JsonObject body = jr.readObject().get("body").asJsonObject();
+
+        boolean isInserted = storeSvc.addInstrument(jwt, storeID, body);
+        if (isInserted) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Success");
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error adding instrument");
+        }
     }
 }
