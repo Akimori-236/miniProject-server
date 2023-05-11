@@ -99,6 +99,8 @@ public class StoreService {
                 .substring(0, length);
     }
 
+
+
     // private static List<JsonObject> sortManager(List<Store> storeList) {
     // // sorting
     // Map<Integer, List<User>> storeMap = new HashMap<>();

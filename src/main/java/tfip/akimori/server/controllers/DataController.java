@@ -22,6 +22,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import tfip.akimori.server.services.InstrumentService;
+import tfip.akimori.server.services.QrService;
 import tfip.akimori.server.services.StoreService;
 
 @RestController
@@ -33,6 +34,7 @@ public class DataController {
     private InstrumentService instruSvc;
     @Autowired
     private StoreService storeSvc;
+
 
     @GetMapping(path = "/borrowed")
     public ResponseEntity<String> getBorrowedByJWT(
@@ -112,7 +114,7 @@ public class DataController {
         }
     }
 
-    @PostMapping(path = "/store/{storeID}/addinstrument")
+    @PostMapping(path = "/store/{storeID}/loanout/{instrumentID}")
     public ResponseEntity<String> addInstrument(
             @RequestHeader(name = "Authorization") String token,
             @PathVariable String storeID,
@@ -133,4 +135,5 @@ public class DataController {
                     .body("Error adding instrument");
         }
     }
+
 }
