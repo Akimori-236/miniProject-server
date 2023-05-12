@@ -19,7 +19,7 @@ import tfip.akimori.server.repositories.StoreRepository;
 @Service
 public class QrService {
 
-    private static final String ANGULAR_URL = "localhost:4200/#/";
+    private static final String ANGULAR_BORROW_URL = "localhost:4200/#/borrow/";
     private static final String GOQR_URL = "https://api.qrserver.com/v1/create-qr-code/";
 
     @Autowired
@@ -48,7 +48,7 @@ public class QrService {
         // check manager clearance
         // verify store manager
         if (storeRepo.isManagerOfStore(email, storeID)) {
-            String loanURL = ANGULAR_URL; //TODO: LINK BACK TO ANGULAR ROUTING
+            String loanURL = ANGULAR_BORROW_URL + instrumentID; // TODO: LINK BACK TO ANGULAR ROUTING
             // access external api
             ResponseEntity<byte[]> response = getQRResponse(buildURL(loanURL));
             // get body from GET response
