@@ -39,7 +39,6 @@ public class StoreRepository implements SQLQueries {
             throw new SQLException("Error inserting into stores table");
         }
         return rowsInserted == 1;
-
     }
 
     public boolean insertStoreManager(String email, String store_id) throws SQLException {

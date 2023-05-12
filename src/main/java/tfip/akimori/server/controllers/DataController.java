@@ -35,10 +35,8 @@ public class DataController {
     @Autowired
     private StoreService storeSvc;
 
-
     @GetMapping(path = "/borrowed")
-    public ResponseEntity<String> getBorrowedByJWT(
-            @RequestHeader(name = "Authorization") String token) {
+    public ResponseEntity<String> getBorrowedByJWT(@RequestHeader(name = "Authorization") String token) {
         System.out.println("GETTING BORROWED");
         String jwt = token.substring(7, token.length());
 
@@ -82,8 +80,7 @@ public class DataController {
     }
 
     @GetMapping(path = "/store")
-    public ResponseEntity<String> getStoresByJWT(
-            @RequestHeader(name = "Authorization") String token) {
+    public ResponseEntity<String> getStoresByJWT(@RequestHeader(name = "Authorization") String token) {
         System.out.println("GETTING STORES");
         String jwt = token.substring(7, token.length());
 
@@ -95,8 +92,7 @@ public class DataController {
     }
 
     @GetMapping(path = "/store/{storeID}")
-    public ResponseEntity<String> getStoreDetails(
-            @RequestHeader(name = "Authorization") String token,
+    public ResponseEntity<String> getStoreDetails(@RequestHeader(name = "Authorization") String token,
             @PathVariable String storeID) {
         System.out.println("GETTING DETAILS OF STORE: " + storeID);
         String jwt = token.substring(7, token.length());
@@ -115,8 +111,7 @@ public class DataController {
     }
 
     @PostMapping(path = "/store/{storeID}/loanout/{instrumentID}")
-    public ResponseEntity<String> addInstrument(
-            @RequestHeader(name = "Authorization") String token,
+    public ResponseEntity<String> addInstrument(@RequestHeader(name = "Authorization") String token,
             @PathVariable String storeID,
             @RequestBody String dataString) {
         String jwt = token.substring(7, token.length());

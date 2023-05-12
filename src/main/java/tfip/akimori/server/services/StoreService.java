@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
 import tfip.akimori.server.models.Instrument;
 import tfip.akimori.server.models.Store;
 import tfip.akimori.server.models.User;
@@ -99,34 +98,32 @@ public class StoreService {
                 .substring(0, length);
     }
 
-
-
     // private static List<JsonObject> sortManager(List<Store> storeList) {
-    // // sorting
-    // Map<Integer, List<User>> storeMap = new HashMap<>();
-    // for (Store s : storeList) {
-    // if (!storeMap.containsKey(s.getStore_id())) {
-    // storeMap.put(s.getStore_id(), new LinkedList<>());
-    // storeMap.get(s.getStore_id()).add(s.getUser());
-    // } else {
-    // storeMap.get(s.getStore_id()).add(s.getUser());
-    // }
-    // }
-    // List<JsonObject> jList = new LinkedList<>();
-    // for (Integer storeid : storeMap.keySet()) {
-    // JsonObjectBuilder job = Json.createObjectBuilder();
-    // JsonArrayBuilder jab = Json.createArrayBuilder();
-    // for (User u : storeMap.get(storeid)) {
-    // jab.add(Json.createObjectBuilder()
-    // .add("email", u.getEmail())
-    // .add("givenname", u.getGivenname())
-    // .add("familyname", u.getFamilyname()));
-    // }
-    // job.add("store_name", storeid);
-    // job.add("managers", jab);
-    // jList.add(job.build());
-    // }
-    // System.out.println(storeMap);
-    // return jList;
+    //     // sorting
+    //     Map<Integer, List<User>> storeMap = new HashMap<>();
+    //     for (Store s : storeList) {
+    //         if (!storeMap.containsKey(s.getStore_id())) {
+    //             storeMap.put(s.getStore_id(), new LinkedList<>());
+    //             storeMap.get(s.getStore_id()).add(s.getUser());
+    //         } else {
+    //             storeMap.get(s.getStore_id()).add(s.getUser());
+    //         }
+    //     }
+    //     List<JsonObject> jList = new LinkedList<>();
+    //     for (Integer storeid : storeMap.keySet()) {
+    //         JsonObjectBuilder job = Json.createObjectBuilder();
+    //         JsonArrayBuilder jab = Json.createArrayBuilder();
+    //         for (User u : storeMap.get(storeid)) {
+    //             jab.add(Json.createObjectBuilder()
+    //                     .add("email", u.getEmail())
+    //                     .add("givenname", u.getGivenname())
+    //                     .add("familyname", u.getFamilyname()));
+    //         }
+    //         job.add("store_name", storeid);
+    //         job.add("managers", jab);
+    //         jList.add(job.build());
+    //     }
+    //     System.out.println(storeMap);
+    //     return jList;
     // }
 }
