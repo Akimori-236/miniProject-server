@@ -42,7 +42,7 @@ public class QrService {
         return response;
     }
 
-    public Optional<Resource> getLoanQR(String instrumentID, String storeID, String jwt) throws UnauthorizedException {
+    public byte[] getLoanQR(String instrumentID, String storeID, String jwt) throws UnauthorizedException {
         // get email from JWT
         String email = jwtSvc.extractUsername(jwt);
         // check manager clearance
@@ -53,12 +53,7 @@ public class QrService {
             ResponseEntity<byte[]> response = getQRResponse(buildURL(loanURL));
             // get body from GET response
             byte[] imageBytes = response.getBody();
-            if (imageBytes != null) {
-                Resource resource = new ByteArrayResource(imageBytes);
-                return Optional.of(resource);
-            } else {
-                return Optional.empty();
-            }
+            return imageBytes;
         } else {
             // not a manager of the store
             throw new UnauthorizedException("Not a manager of store");
@@ -66,11 +61,10 @@ public class QrService {
     }
 
     private String buildURL(String data) {
-        String url = UriComponentsBuilder.fromUriString(GOQR_URL)
+        return UriComponentsBuilder.fromUriString(GOQR_URL)
                 .queryParam("data", data)
+                .build()
                 .toUriString();
-        // System.out.println(url);
-        return url;
     }
 
     private String buildURL(String data, Integer pixelSize) throws Exception {
@@ -78,6 +72,7 @@ public class QrService {
             return UriComponentsBuilder.fromUriString(GOQR_URL)
                     .queryParam("data", data)
                     .queryParam("size", pixelSize.toString() + "x" + pixelSize.toString())
+                    .build()
                     .toUriString();
         } else {
             throw new Exception("Pixel size needs to be 1000 or below");
