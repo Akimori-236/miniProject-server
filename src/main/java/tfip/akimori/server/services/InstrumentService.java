@@ -47,14 +47,16 @@ public class InstrumentService {
                 .model(jObj.getString("model"))
                 .serial_number(jObj.getString("serial_number"))
                 .store_id(storeID)
-                .isRepairing(false) // hard code for now
+                .isRepairing(false)
                 .email(email)
                 .build();
         // System.out.println(i);
+        logSvc.logInstrumentActivity("insert", i.getStore_id(), email, i.getInstrument_id(), i.getInstrument_type(),
+                i.getSerial_number());
         return instruRepo.addInstrument(i);
     }
 
-    // how to loan out to myself?
+    // TODO: how to loan out to myself?
 
     private static String generateID(int length) {
         return UUID.randomUUID()
