@@ -22,7 +22,6 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import tfip.akimori.server.services.InstrumentService;
-import tfip.akimori.server.services.QrService;
 import tfip.akimori.server.services.StoreService;
 
 @RestController
@@ -119,7 +118,7 @@ public class DataController {
         JsonReader jr = Json.createReader(new StringReader(dataString));
         JsonObject body = jr.readObject().get("body").asJsonObject();
 
-        boolean isInserted = storeSvc.addInstrument(jwt, storeID, body);
+        boolean isInserted = instruSvc.addInstrument(jwt, storeID, body);
         if (isInserted) {
             return ResponseEntity
                     .status(HttpStatus.OK)

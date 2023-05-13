@@ -43,4 +43,20 @@ public class InstrumentRepository implements SQLQueries {
         return rowsInserted > 0;
     }
 
+    public boolean addInstrument(Instrument i) {
+        int rowsInserted = template.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(SQL_INSERT_INSTRUMENT);
+            ps.setString(1, i.getInstrument_id());
+            ps.setString(2, i.getInstrument_type());
+            ps.setString(3, i.getBrand());
+            ps.setString(4, i.getModel());
+            ps.setString(5, i.getSerial_number());
+            ps.setString(6, i.getStore_id());
+            ps.setBoolean(7, i.isRepairing());
+            return ps;
+        });
+        return rowsInserted > 0;
+        // NO REPLY?!?!
+    }
+
 }

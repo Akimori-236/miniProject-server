@@ -30,6 +30,8 @@ public class AuthService {
     private PasswordEncoder pwEncoder;
     @Autowired
     private AuthenticationManager authManager;
+    @Autowired
+    private MongoLoggingService logSvc;
 
     public JsonObject register(JsonObject request) throws DuplicateEmailException {
         User newUser = User.builder()
@@ -42,6 +44,8 @@ public class AuthService {
                 .build();
         // System.out.println(newUser);
         userRepo.insertUser(newUser);
+        // LOGGING
+        logSvc.logUserActivity(newUser.getEmail(), "register");
         // give new user JWT
         return jwtSvc.generateJWT(newUser);
     }
@@ -54,6 +58,8 @@ public class AuthService {
         // authenticated
         User user = userRepo.getUserByEmail(request.getString("email"))
                 .orElseThrow();
+        // LOGGING
+        logSvc.logUserActivity(request.getString("email"), "login");
         return jwtSvc.generateJWT(user);
     }
 
@@ -71,6 +77,8 @@ public class AuthService {
                 .add("isGoogleLogin", true)
                 .build();
         System.out.println(googleUser);
+        // LOGGING
+        logSvc.logUserActivity(googleUser.getString("email"), "google register");
         return this.register(googleUser);
     }
 
@@ -89,6 +97,8 @@ public class AuthService {
         // authenticated by google already
         User user = userRepo.getUserByEmail(googleUser.getString("email"))
                 .orElseThrow();
+        // LOGGING
+        logSvc.logUserActivity(googleUser.getString("email"), "google login");
         return jwtSvc.generateJWT(user);
     }
 

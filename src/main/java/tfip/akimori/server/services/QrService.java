@@ -1,10 +1,6 @@
 package tfip.akimori.server.services;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,9 +15,9 @@ import tfip.akimori.server.repositories.StoreRepository;
 @Service
 public class QrService {
 
-    private static final String ANGULAR_BORROW_URL = "localhost:4200/#/borrow/";
+    private static final String ANGULAR_BORROW_URL = "localhost:4200/borrow/";
     private static final String GOQR_URL = "https://api.qrserver.com/v1/create-qr-code/";
-
+    private static final String QR_COLOR_HEX = "00a";
     @Autowired
     private JwtService jwtSvc;
     @Autowired
@@ -63,19 +59,21 @@ public class QrService {
     private String buildURL(String data) {
         return UriComponentsBuilder.fromUriString(GOQR_URL)
                 .queryParam("data", data)
+                .queryParam("color", QR_COLOR_HEX)
                 .build()
                 .toUriString();
     }
 
-    private String buildURL(String data, Integer pixelSize) throws Exception {
-        if (pixelSize <= 1000) {
-            return UriComponentsBuilder.fromUriString(GOQR_URL)
-                    .queryParam("data", data)
-                    .queryParam("size", pixelSize.toString() + "x" + pixelSize.toString())
-                    .build()
-                    .toUriString();
-        } else {
-            throw new Exception("Pixel size needs to be 1000 or below");
-        }
-    }
+    // private String buildURL(String data, Integer pixelSize) throws Exception {
+    //     if (pixelSize <= 1000) {
+    //         return UriComponentsBuilder.fromUriString(GOQR_URL)
+    //                 .queryParam("data", data)
+    //                 .queryParam("size", pixelSize.toString() + "x" + pixelSize.toString())
+    //                 .build()
+    //                 .toUriString();
+    //     } else {
+    //         throw new Exception("Pixel size needs to be 1000 or below");
+    //     }
+    // }
+
 }

@@ -1,6 +1,5 @@
 package tfip.akimori.server.services;
 
-import java.io.StringReader;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +19,6 @@ import tfip.akimori.server.utils.MyUtils;
 
 @Service
 public class StoreService {
-    private static final int ID_LENGTH = 8;
 
     @Autowired
     private StoreRepository storeRepo;
@@ -70,33 +68,11 @@ public class StoreService {
         }
     }
 
-    public boolean addInstrument(String jwt, String storeID, JsonObject jObj) {
-        // get email from JWT
-        String email = jwtSvc.extractUsername(jwt);
 
-        Instrument i = Instrument.builder()
-                .instrument_id(generateID(ID_LENGTH))
-                .instrument_type(jObj.getString("instrument_type"))
-                .brand(jObj.getString("brand"))
-                .model(jObj.getString("model"))
-                .serial_number(jObj.getString("serial_number"))
-                .store_id(storeID)
-                .isRepairing(false) // hard code for now
-                .email(email)
-                .build();
-        // System.out.println(i);
-        return storeRepo.addInstrument(i);
-    }
 
     // ==============================
 
-    private static String generateID(int length) {
-        return UUID.randomUUID()
-                .toString()
-                .replace("-", "")
-                .replace("_", "")
-                .substring(0, length);
-    }
+
 
     // private static List<JsonObject> sortManager(List<Store> storeList) {
     //     // sorting
