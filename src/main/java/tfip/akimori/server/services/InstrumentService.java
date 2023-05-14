@@ -50,7 +50,7 @@ public class InstrumentService {
                 .isRepairing(false)
                 .email(email)
                 .build();
-        // System.out.println(i);
+        System.out.println(i);
         logSvc.logInstrumentActivity("insert", i.getStore_id(), email, i.getInstrument_id(), i.getInstrument_type(),
                 i.getSerial_number());
         return instruRepo.addInstrument(i);

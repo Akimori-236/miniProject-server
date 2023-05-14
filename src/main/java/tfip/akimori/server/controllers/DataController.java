@@ -109,10 +109,11 @@ public class DataController {
         }
     }
 
-    @PostMapping(path = "/store/{storeID}/loanout/{instrumentID}")
+    @PostMapping(path = "/store/{storeID}/addinstrument")
     public ResponseEntity<String> addInstrument(@RequestHeader(name = "Authorization") String token,
             @PathVariable String storeID,
             @RequestBody String dataString) {
+        System.out.println(dataString);
         String jwt = token.substring(7, token.length());
         System.out.println("ADDING INSTRUMENT TO STORE: " + storeID);
         JsonReader jr = Json.createReader(new StringReader(dataString));
