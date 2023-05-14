@@ -16,7 +16,6 @@ import jakarta.json.JsonObject;
 import tfip.akimori.server.configs.GoogleVerifier;
 import tfip.akimori.server.exceptions.DuplicateEmailException;
 import tfip.akimori.server.services.AuthService;
-import tfip.akimori.server.services.MongoLoggingService;
 
 @RestController
 @CrossOrigin(origins = "*") // DANGEROUS

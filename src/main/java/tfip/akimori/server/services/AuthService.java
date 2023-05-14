@@ -34,6 +34,7 @@ public class AuthService {
         private MongoLoggingService logSvc;
 
         public JsonObject register(JsonObject request) throws DuplicateEmailException {
+                System.out.println("REGISTERING");
                 User newUser = User.builder()
                                 .givenname(request.getString("givenname"))
                                 .familyname(request.getString("familyname"))
@@ -51,6 +52,7 @@ public class AuthService {
         }
 
         public JsonObject login(JsonObject request) {
+                System.out.println("LOGGING IN");
                 authManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(
                                                 request.getString("email"),
