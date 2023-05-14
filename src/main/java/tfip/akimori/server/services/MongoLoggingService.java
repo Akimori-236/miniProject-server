@@ -31,7 +31,7 @@ public class MongoLoggingService {
         doc.put("instrument_id", instrument_id);
         doc.put("instrument_type", instrument_type);
         doc.put("serial_number", serial_number);
-        mongoRepo.insertUserActivity(doc);
+        mongoRepo.insertInstrumentActivity(doc);
     }
 
 }
