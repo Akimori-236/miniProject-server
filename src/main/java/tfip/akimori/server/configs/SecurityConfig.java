@@ -25,9 +25,12 @@ public class SecurityConfig {
         http.csrf().disable()
                 // whitelist account creation and logging in (no token yet)
                 .authorizeHttpRequests()
+                // .requestMatchers("/#/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
                 // require authentication for all other requests
-                .anyRequest().authenticated()
+                .anyRequest()
+                .permitAll()
+                // .authenticated()
                 .and()
                 // set session creation policy to stateless
                 .sessionManagement()
