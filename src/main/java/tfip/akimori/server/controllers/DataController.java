@@ -26,7 +26,7 @@ import tfip.akimori.server.services.StoreService;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping(path = "/api/data")
+@RequestMapping(path = "/api/data", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DataController {
 
     @Autowired
@@ -43,6 +43,7 @@ public class DataController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
+                
                 .body(jList.toString());
     }
 
@@ -54,7 +55,7 @@ public class DataController {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body("\"message\": \"Please include 'storeName' query parameter\"");
+                    .body("\"error\": \"Please include 'storeName' query parameter\"");
         }
         String jwt = token.substring(7, token.length());
 
@@ -100,7 +101,7 @@ public class DataController {
         if (data == null) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body("Not a manager of the store");
+                    .body("\"error\":\"Not a manager of the store\"");
         } else {
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -121,13 +122,9 @@ public class DataController {
 
         boolean isInserted = instruSvc.addInstrument(jwt, storeID, body);
         if (isInserted) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body("Success");
+            return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error adding instrument");
+            return ResponseEntity.internalServerError().build();
         }
     }
 
