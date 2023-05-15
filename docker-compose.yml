@@ -33,6 +33,7 @@ services:
       - "8080:8080"
     secrets:
     environment:
+      - MONGO_URL=mongodb:27017/musicstore
       - MONGOHOST=mongodb
       - MONGOPORT=27017
       - MONGODB=musicstore
