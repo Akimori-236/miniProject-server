@@ -1,22 +1,39 @@
-version: '3'
+version: '3.9'
 services:
-  frontend:
+  mongodb:
+      image: mongo
+      container_name: "mongodb"
+      environment:
+        - MONGO_INITDB_ROOT_USERNAME=root
+        - MONGO_INITDB_ROOT_PASSWORD=230689
+        - MONGO_INITDB_DATABASE=musicstore
+      volumes:
+        - ./mongodata:/data/db
+      networks:
+        - some-net
+      ports:
+        - 27017:27017
+  springboot:
+    container_name: "spring-boot"
     build:
-      context: .
+      context: ./
       dockerfile: Dockerfile
     ports:
-      - 80:80
-
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 8080:8080
+      - "8080:8080"
+    secrets:
+    environment:
+      - MONGOHOST=mongodb
+      - MONGOPORT=27017
+      - MONGODB=musicstore
+      - MONGOUSER=root
+      - MONGOPASSWORD=230689
     depends_on:
       - mongodb
+    links:
+      - mongodb
+    networks:
+      - some-net
 
-  mongodb:
-    image: mongo
-    ports:
-      - 27017:27017
+networks:
+  some-net:
+    driver: bridge
