@@ -22,6 +22,12 @@ public interface SQLQueries {
             VALUES(?, ?, ?, ?, ?, ?, ?)
             """;
 
+    public static final String SQL_INSERT_GOOGLEUSER = """
+            INSERT INTO google_users
+            (google_user_id, email, email_verified, name, picture , family_name, given_name)
+            VALUES(?, ?, ?, ?, ?, ?, ?);
+            """;
+
     // READ
     public static final String SQL_GETUSERBYEMAIL = """
             SELECT * FROM users WHERE email = ?

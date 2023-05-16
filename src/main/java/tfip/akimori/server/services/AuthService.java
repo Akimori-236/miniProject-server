@@ -1,5 +1,6 @@
 package tfip.akimori.server.services;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 
@@ -15,6 +17,7 @@ import jakarta.json.JsonObject;
 import tfip.akimori.server.exceptions.DuplicateEmailException;
 import tfip.akimori.server.models.Role;
 import tfip.akimori.server.models.User;
+import tfip.akimori.server.repositories.GoogleRepository;
 import tfip.akimori.server.repositories.UserRepository;
 
 @Service
@@ -32,6 +35,8 @@ public class AuthService {
         private AuthenticationManager authManager;
         @Autowired
         private MongoLoggingService logSvc;
+        @Autowired
+        private GoogleRepository googleRepo;
 
         public JsonObject register(JsonObject request) throws DuplicateEmailException {
                 System.out.println("REGISTERING");
@@ -51,7 +56,7 @@ public class AuthService {
                 return jwtSvc.generateJWT(newUser);
         }
 
-        public JsonObject login(JsonObject request) {
+        public JsonObject login(JsonObject request) throws NoSuchElementException {
                 System.out.println("LOGGING IN");
                 authManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(
@@ -65,6 +70,7 @@ public class AuthService {
                 return jwtSvc.generateJWT(user);
         }
 
+        @Transactional(rollbackFor = DuplicateEmailException.class)
         public JsonObject registerGoogleUser(Payload payload) throws DuplicateEmailException {
                 System.out.println("REGISTERING GOOGLE USER");
                 JsonObject googleUser = Json.createObjectBuilder()
@@ -81,10 +87,12 @@ public class AuthService {
                 System.out.println(googleUser);
                 // LOGGING
                 logSvc.logUserActivity("google register", googleUser.getString("email"));
-                return this.register(googleUser);
+                JsonObject jwt = this.register(googleUser);
+                googleRepo.insertUser(payload);
+                return jwt;
         }
 
-        public JsonObject loginGoogleUser(Payload payload) {
+        public JsonObject loginGoogleUser(Payload payload) throws NoSuchElementException {
                 System.out.println("LOGGING IN GOOGLE USER");
                 JsonObject googleUser = Json.createObjectBuilder()
                                 .add("googleUserId", payload.getSubject())
