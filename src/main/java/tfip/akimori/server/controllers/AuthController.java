@@ -62,7 +62,7 @@ public class AuthController {
     }
 
     @PostMapping(path = "/googleregister")
-    public ResponseEntity<String> googleRegister(@RequestBody String clientToken) {
+    public ResponseEntity<String> googleRegister(@RequestBody String clientToken) throws Exception {
         // System.out.println(clientToken);
         try {
             GoogleIdToken idToken = GoogleVerifier.getVerifier().verify(clientToken);
