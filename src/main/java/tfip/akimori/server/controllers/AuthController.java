@@ -2,6 +2,8 @@ package tfip.akimori.server.controllers;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.NoSuchElementException;
+
 import org.glassfish.json.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,7 +56,11 @@ public class AuthController {
         // read JSON
         JsonObject jsonRequest = JsonUtil.toJson(request).asJsonObject();
         JsonObject jwt;
-        jwt = authSvc.login(jsonRequest);
+        try {
+            jwt = authSvc.login(jsonRequest);
+        } catch (NoSuchElementException nsee) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
