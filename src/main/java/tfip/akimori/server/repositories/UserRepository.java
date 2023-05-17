@@ -44,14 +44,9 @@ public class UserRepository implements SQLQueries {
         return (key == null) ? null : key.intValue();
     }
 
-    public Optional<User> getUserByEmail(String email) {
-        try {
-            User user = template.queryForObject(SQL_GETUSERBYEMAIL, BeanPropertyRowMapper.newInstance(User.class),
+    public User getUserByEmail(String email) throws EmptyResultDataAccessException {
+            return template.queryForObject(SQL_GETUSERBYEMAIL, BeanPropertyRowMapper.newInstance(User.class),
                     email);
-            return Optional.of(user);
-        } catch (EmptyResultDataAccessException ex) {
-            return Optional.empty();
-        }
     }
 
 }

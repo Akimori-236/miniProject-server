@@ -58,8 +58,8 @@ public class AuthController {
         JsonObject jwt;
         try {
             jwt = authSvc.login(jsonRequest);
-        } catch (NoSuchElementException nsee) {
-            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity
                 .status(HttpStatus.OK)

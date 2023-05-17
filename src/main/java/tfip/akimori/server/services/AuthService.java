@@ -4,6 +4,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,15 +57,14 @@ public class AuthService {
                 return jwtSvc.generateJWT(newUser);
         }
 
-        public JsonObject login(JsonObject request) throws NoSuchElementException {
+        public JsonObject login(JsonObject request) throws NoSuchElementException, EmptyResultDataAccessException {
                 System.out.println("LOGGING IN: " + request.getString("email"));
                 authManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(
                                                 request.getString("email"),
                                                 request.getString("password")));
                 // authenticated
-                User user = userRepo.getUserByEmail(request.getString("email"))
-                                .orElseThrow();
+                User user = userRepo.getUserByEmail(request.getString("email"));
                 // LOGGING
                 logSvc.logUserActivity("login", request.getString("email"));
                 return jwtSvc.generateJWT(user);
@@ -92,7 +92,7 @@ public class AuthService {
                 return jwt;
         }
 
-        public JsonObject loginGoogleUser(Payload payload) throws NoSuchElementException {
+        public JsonObject loginGoogleUser(Payload payload) throws NoSuchElementException,EmptyResultDataAccessException {
                 System.out.println("LOGGING IN GOOGLE USER: " + payload.getEmail());
                 JsonObject googleUser = Json.createObjectBuilder()
                                 .add("googleUserId", payload.getSubject())
@@ -105,8 +105,7 @@ public class AuthService {
                                 .build();
                 System.out.println(googleUser);
                 // authenticated by google already
-                User user = userRepo.getUserByEmail(googleUser.getString("email"))
-                                .orElseThrow();
+                User user = userRepo.getUserByEmail(googleUser.getString("email"));
                 // LOGGING
                 logSvc.logUserActivity("google login", googleUser.getString("email"));
                 return jwtSvc.generateJWT(user);
