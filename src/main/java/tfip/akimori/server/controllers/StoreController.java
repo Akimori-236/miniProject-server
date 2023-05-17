@@ -27,7 +27,7 @@ import tfip.akimori.server.services.StoreService;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(path = "/api/data", produces = MediaType.APPLICATION_JSON_VALUE)
-public class DataController {
+public class StoreController {
 
     @Autowired
     private InstrumentService instruSvc;
@@ -127,4 +127,5 @@ public class DataController {
         }
     }
 
+    
 }
