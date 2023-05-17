@@ -39,7 +39,7 @@ public class AuthService {
         private GoogleRepository googleRepo;
 
         public JsonObject register(JsonObject request) throws DuplicateEmailException {
-                System.out.println("REGISTERING");
+                System.out.println("REGISTERING: " + request.getString("email"));
                 User newUser = User.builder()
                                 .givenname(request.getString("givenname"))
                                 .familyname(request.getString("familyname"))
@@ -57,7 +57,7 @@ public class AuthService {
         }
 
         public JsonObject login(JsonObject request) throws NoSuchElementException {
-                System.out.println("LOGGING IN");
+                System.out.println("LOGGING IN: " + request.getString("email"));
                 authManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(
                                                 request.getString("email"),
@@ -70,9 +70,9 @@ public class AuthService {
                 return jwtSvc.generateJWT(user);
         }
 
-        @Transactional(rollbackFor = DuplicateEmailException.class)
-        public JsonObject registerGoogleUser(Payload payload) throws DuplicateEmailException {
-                System.out.println("REGISTERING GOOGLE USER");
+        @Transactional(rollbackFor = Exception.class)
+        public JsonObject registerGoogleUser(Payload payload) throws Exception {
+                System.out.println("REGISTERING GOOGLE USER: " + payload.getEmail());
                 JsonObject googleUser = Json.createObjectBuilder()
                                 .add("googleUserId", payload.getSubject())
                                 .add("email", payload.getEmail())
@@ -93,7 +93,7 @@ public class AuthService {
         }
 
         public JsonObject loginGoogleUser(Payload payload) throws NoSuchElementException {
-                System.out.println("LOGGING IN GOOGLE USER");
+                System.out.println("LOGGING IN GOOGLE USER: " + payload.getEmail());
                 JsonObject googleUser = Json.createObjectBuilder()
                                 .add("googleUserId", payload.getSubject())
                                 .add("email", payload.getEmail())
