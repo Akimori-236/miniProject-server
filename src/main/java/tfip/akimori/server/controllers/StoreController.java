@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
+import jakarta.mail.MessagingException;
+import tfip.akimori.server.services.EmailSenderService;
 import tfip.akimori.server.services.InstrumentService;
 import tfip.akimori.server.services.StoreService;
 
@@ -33,6 +35,8 @@ public class StoreController {
     private InstrumentService instruSvc;
     @Autowired
     private StoreService storeSvc;
+    @Autowired
+    private EmailSenderService emailSvc;
 
     @GetMapping(path = "/borrowed")
     public ResponseEntity<String> getBorrowedByJWT(@RequestHeader(name = "Authorization") String token) {
@@ -127,5 +131,31 @@ public class StoreController {
         }
     }
 
-    
+    @PostMapping(path = "/store/{storeID}/invitemanager")
+    public ResponseEntity<String> sendEmailInviteManager(@RequestHeader(name = "Authorization") String token,
+            @PathVariable String storeID,
+            @RequestParam String managerEmail) {
+        String jwt = token.substring(7, token.length());
+        System.out.println("SENDING EMAIL TO: " + managerEmail);
+        try {
+            emailSvc.sendManagerInvite(managerEmail, jwt, storeID);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("Email invite sent!");
+    }
+
+    @GetMapping(path = "/instrument/{id}")
+    public ResponseEntity<String> getInstrument(@PathVariable String id) {
+        JsonObject jObj = instruSvc.getInstrumentByID(id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(jObj.toString());
+    }
+
 }

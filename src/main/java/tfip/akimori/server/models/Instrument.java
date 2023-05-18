@@ -21,4 +21,5 @@ public class Instrument {
     private String email;
     private String givenname;
     private String familyname;
+    private String remarks;
 }

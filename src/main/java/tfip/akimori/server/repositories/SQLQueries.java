@@ -18,7 +18,7 @@ public interface SQLQueries {
             WHERE email = ?), ?)
             """; // email, store_id
     public static final String SQL_INSERT_INSTRUMENT = """
-            INSERT INTO instruments(instrument_id, instrument_type, brand, model, serial_number, store_id, isRepairing)
+            INSERT INTO instruments(instrument_id, instrument_type, brand, model, serial_number, remarks, store_id, isRepairing)
             VALUES(?, ?, ?, ?, ?, ?, ?)
             """;
 
@@ -45,6 +45,13 @@ public interface SQLQueries {
             ON i.user_id = u2.user_id
             WHERE u.email = ?
             """;
+    public static final String SQL_GETINSTRUMENTBYID = """
+            SELECT instrument_id, instrument_type, brand, model, serial_number, i.store_id, store_name, isRepairing
+            FROM instruments i
+            INNER JOIN stores s
+            ON i.store_id = s.store_id
+            WHERE i.instrument_id = ?
+            """;
     public static final String SQL_GETBORROWEDBYEMAIL = """
             SELECT instrument_id, instrument_type, brand, model, serial_number, i.store_id, store_name, isRepairing, givenname, familyname, email
             FROM instruments i
@@ -63,6 +70,11 @@ public interface SQLQueries {
             INNER JOIN users u
             ON m.manager_id = u.user_id
             WHERE u.email = ?
+            """;
+
+    public static final String SQL_GETALLSCHEDULES = """
+            SELECT email, email_scheduled_hour
+            FROM users;
             """;
 
     // public static final String SQL_GETSTOREMANAGERS = """

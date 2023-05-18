@@ -2,6 +2,7 @@ package tfip.akimori.server.repositories;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import tfip.akimori.server.exceptions.DuplicateEmailException;
+import tfip.akimori.server.models.EmailSchedule;
 import tfip.akimori.server.models.User;
 
 @Repository
@@ -45,8 +47,11 @@ public class UserRepository implements SQLQueries {
     }
 
     public User getUserByEmail(String email) throws EmptyResultDataAccessException {
-            return template.queryForObject(SQL_GETUSERBYEMAIL, BeanPropertyRowMapper.newInstance(User.class),
-                    email);
+        return template.queryForObject(SQL_GETUSERBYEMAIL, BeanPropertyRowMapper.newInstance(User.class),
+                email);
     }
 
+    public List<EmailSchedule> getAllSchedules() {
+        return template.query(SQL_GETALLSCHEDULES, new BeanPropertyRowMapper<>(EmailSchedule.class));
+    }
 }

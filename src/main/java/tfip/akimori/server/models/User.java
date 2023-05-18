@@ -19,9 +19,9 @@ import lombok.NoArgsConstructor;
 public class User implements UserDetails {
     private Integer id;
 
+    private String email;
     private String givenname;
     private String familyname;
-    private String email;
     private String password;
     private Role role;
     private Boolean isGoogleLogin;
