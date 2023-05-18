@@ -59,4 +59,10 @@ public class InstrumentRepository implements SQLQueries {
         // NO REPLY?!?!
     }
 
+    public Instrument getInstrumentById(String id) {
+        return template.queryForObject(SQL_GETINSTRUMENTBYID,
+                BeanPropertyRowMapper.newInstance(Instrument.class),
+                id);
+    }
+
 }

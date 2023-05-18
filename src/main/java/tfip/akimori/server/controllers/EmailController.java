@@ -22,4 +22,7 @@ public class EmailController {
         emailSvc.sendEmail(emailRequest.getToEmail(), emailRequest.getSubject(), emailRequest.getBody());
         return ResponseEntity.ok("Email sent successfully.");
     }
+
+    
+
 }

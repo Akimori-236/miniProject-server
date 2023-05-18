@@ -15,7 +15,7 @@ import tfip.akimori.server.repositories.StoreRepository;
 @Service
 public class QrService {
 
-    private static final String ANGULAR_BORROW_URL = "localhost:4200/borrow/";
+    private static final String ANGULAR_BORROW_URL = "https://mp-server-production.up.railway.app/#/borrow/";
     private static final String GOQR_URL = "https://api.qrserver.com/v1/create-qr-code/";
     private static final String QR_COLOR_HEX = "00a";
     @Autowired
