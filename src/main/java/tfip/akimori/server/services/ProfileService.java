@@ -18,6 +18,7 @@ public class ProfileService {
 
     public JsonObject getProfile(String jwt) {
         String email = jwtSvc.extractUsername(jwt);
+        System.out.println("GETTING PROFILE OF: " + email);
         User user = userRepo.getUserByEmail(email);
         JsonObject userJson = Json.createObjectBuilder()
                 .add("email", user.getEmail())
