@@ -3,6 +3,7 @@ package tfip.akimori.server.repositories;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,12 @@ public class MongoLoggingRepository {
         template.insert(activity, COLLECTION_STORES);
     }
 
+    public List<Document> getLogsByStoreID(String StoreID) {
+        // template TODO:
+        return null;
+    }
+
     private DateTimeFormatter getDTF(String format) {
         return DateTimeFormatter.ofPattern(format);
     }
-
 }

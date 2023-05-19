@@ -19,15 +19,16 @@ public class MongoLoggingService {
     }
 
     public void logInstrumentActivity(
-            String activity,
             String store_id,
+            String activity,
             String email,
             String instrument_id,
             String instrument_type,
             String serial_number) {
         Document doc = new Document();
-        doc.put("email", email);
+        doc.put("store_id", store_id);
         doc.put("activity", activity);
+        doc.put("email", email);
         doc.put("instrument_id", instrument_id);
         doc.put("instrument_type", instrument_type);
         doc.put("serial_number", serial_number);
