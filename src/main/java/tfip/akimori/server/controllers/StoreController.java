@@ -1,6 +1,5 @@
 package tfip.akimori.server.controllers;
 
-import java.io.StringReader;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,37 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
 import jakarta.mail.MessagingException;
 import tfip.akimori.server.services.EmailSenderService;
-import tfip.akimori.server.services.InstrumentService;
 import tfip.akimori.server.services.StoreService;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping(path = "/api/data", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/store", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StoreController {
 
-    @Autowired
-    private InstrumentService instruSvc;
     @Autowired
     private StoreService storeSvc;
     @Autowired
     private EmailSenderService emailSvc;
 
-    @GetMapping(path = "/borrowed")
-    public ResponseEntity<String> getBorrowedByJWT(@RequestHeader(name = "Authorization") String token) {
-        System.out.println("GETTING BORROWED");
-        String jwt = token.substring(7, token.length());
-
-        List<JsonObject> jList = instruSvc.getBorrowedByJWT(jwt);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(jList.toString());
-    }
-
-    @PostMapping(path = "/store/create")
+    @PostMapping(path = "/create")
     public ResponseEntity<String> createStore(@RequestHeader(name = "Authorization") String token,
             @RequestParam String storename) {
         System.out.println("CREATING STORE: " + storename);
@@ -82,7 +64,7 @@ public class StoreController {
                 .body(isCreated.toString());
     }
 
-    @GetMapping(path = "/store")
+    @GetMapping(path = "")
     public ResponseEntity<String> getStoresByJWT(@RequestHeader(name = "Authorization") String token) {
         System.out.println("GETTING STORES");
         String jwt = token.substring(7, token.length());
@@ -94,7 +76,7 @@ public class StoreController {
                 .body(storeList.toString());
     }
 
-    @GetMapping(path = "/store/{storeID}")
+    @GetMapping(path = "/{storeID}")
     public ResponseEntity<String> getStoreDetails(@RequestHeader(name = "Authorization") String token,
             @PathVariable String storeID) {
         System.out.println("GETTING DETAILS OF STORE: " + storeID);
@@ -113,25 +95,7 @@ public class StoreController {
         }
     }
 
-    @PostMapping(path = "/store/{storeID}/addinstrument")
-    public ResponseEntity<String> addInstrument(@RequestHeader(name = "Authorization") String token,
-            @PathVariable String storeID,
-            @RequestBody String dataString) {
-        System.out.println(dataString);
-        String jwt = token.substring(7, token.length());
-        System.out.println("ADDING INSTRUMENT TO STORE: " + storeID);
-        JsonReader jr = Json.createReader(new StringReader(dataString));
-        JsonObject body = jr.readObject().get("body").asJsonObject();
-
-        boolean isInserted = instruSvc.addInstrument(jwt, storeID, body);
-        if (isInserted) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.internalServerError().build();
-        }
-    }
-
-    @PostMapping(path = "/store/{storeID}/invitemanager")
+    @PostMapping(path = "/invite/{storeID}")
     public ResponseEntity<String> sendEmailInviteManager(@RequestHeader(name = "Authorization") String token,
             @PathVariable String storeID,
             @RequestParam String managerEmail) {
@@ -149,13 +113,6 @@ public class StoreController {
                 .body("Email invite sent!");
     }
 
-    @GetMapping(path = "/instrument/{id}")
-    public ResponseEntity<String> getInstrument(@PathVariable String id) {
-        JsonObject jObj = instruSvc.getInstrumentByID(id);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(jObj.toString());
-    }
+
 
 }
